@@ -68,6 +68,22 @@ module Azure
       )
     end
 
+    def dns_zone(resource_group, name)
+      get(
+        url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{name}",
+                  resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+    end
+
+    def dns_zones(resource_group)
+      get(
+        url: link(location: 'Microsoft.Network/dnszones',
+                  resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+    end
+
     def key_vaults(resource_group)
       get(
         url: link(location: 'Microsoft.KeyVault/vaults',
@@ -631,11 +647,15 @@ module Azure
       @rest_client ||= Azure::Rest.new(backend.azure_client)
     end
 
-    def link(location:, provider: true, resource_group: nil)
-      "/subscriptions/#{subscription_id}" \
+    def link(location:, provider: true, resource_group: nil, trail:true)
+      # trailval= trail ? '/':nil
+      retval = "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
-      "/#{location}/"
+      "/#{location}#{trail ? '/':nil}"
+
+      puts retval
+      retval
     end
   end
 end
