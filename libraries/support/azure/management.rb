@@ -648,7 +648,6 @@ module Azure
     end
 
     def link(location:, provider: true, resource_group: nil, trail:true)
-      # trailval= trail ? '/':nil
       retval = "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
