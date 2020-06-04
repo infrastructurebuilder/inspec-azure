@@ -134,7 +134,6 @@ module Azure
       )
     end
 
-<<<<<<< HEAD
     def dns_recordsets(resource_group, zone_name)
       get(
         url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{zone_name}/all",
@@ -154,8 +153,6 @@ module Azure
 
 
 
-=======
->>>>>>> cee17b8... First try at dns zone
     def dns_zone(resource_group, name)
       get(
         url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{name}",
@@ -752,24 +749,10 @@ module Azure
     end
 
     def link(location:, provider: true, resource_group: nil, trail:true)
-<<<<<<< HEAD
-<<<<<<< HEAD
       "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
       "/#{location}#{trail ? '/':nil}"
-=======
-      # trailval= trail ? '/':nil
-=======
->>>>>>> a7e32c4... Remove unnecessary var
-      retval = "/subscriptions/#{subscription_id}" \
-      "#{"/resourceGroups/#{resource_group}" if resource_group}" \
-      "#{'/providers' if provider}" \
-      "/#{location}#{trail ? '/':nil}"
-
-      puts retval
-      retval
->>>>>>> cee17b8... First try at dns zone
     end
   end
 end
