@@ -753,12 +753,15 @@ module Azure
 
     def link(location:, provider: true, resource_group: nil, trail:true)
 <<<<<<< HEAD
+<<<<<<< HEAD
       "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
       "/#{location}#{trail ? '/':nil}"
 =======
       # trailval= trail ? '/':nil
+=======
+>>>>>>> a7e32c4... Remove unnecessary var
       retval = "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
