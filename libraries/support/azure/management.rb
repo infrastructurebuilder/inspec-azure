@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'singleton'
+require 'ostruct'
 
 module Azure
   class Management
@@ -67,6 +68,66 @@ module Azure
         api_version: '2018-07-01',
       )
     end
+
+    def dns_recordsets(resource_group, zone_name)
+      get(
+        url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{zone_name}/all",
+          resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+    end
+
+
+    def dns_records(resource_group: nil, zone_name: , record_type: , record_name: nil)
+      records = get(
+        url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{zone_name}/#{record_type}",
+          resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+      puts "\n: records = \n#{records}\n-----\n"
+      arecords = Hash.new
+      for d in records do
+        arecord = OpenStruct.new
+        arecord.id = d.id
+        arecord.name = d.name
+        arecord.type = d.type
+        arecord.fqdn = d.properties.fqdn
+        arecord.TTL = d.properties.TTL
+        arecord.etag = d.etag
+        arecord.properties = d.properties
+        case record_type
+        when 'A'
+          arecord.ipv4addresses = d.properties.ARecords.collect { |r| r.ipv4Address }
+        when 'AAAA'
+          return records
+        when 'CAA'
+          return records
+        when 'CNAME'
+          
+        when 'MX'
+        when 'NS'
+        when 'PTR'
+        when 'SOA'
+          arecord.email = d.properties.SOARecord.email
+          arecord.expireTime = d.properties.SOARecord.expireTime
+          arecord.host = d.properties.SOARecord.host
+          arecord.minimumTTL = d.properties.SOARecord.minimumTTL
+          arecord.refreshTime = d.properties.SOARecord.refreshTime
+          arecord.retryTime = d.properties.SOARecord.retryTime
+          arecord.serialNumber = d.properties.SOARecord.serialNumber
+        when 'SRV'
+        when 'TXT'
+          
+        else 
+          #
+        end        
+        arecords[d.name]  = arecord if (record_name == nil || record_name == d.name)
+      end
+      puts "\nIPV4 = #{arecords}\n"
+      arecords
+    end
+
+
 
     def dns_zone(resource_group, name)
       get(
@@ -664,13 +725,10 @@ module Azure
     end
 
     def link(location:, provider: true, resource_group: nil, trail:true)
-      retval = "/subscriptions/#{subscription_id}" \
+      "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
       "/#{location}#{trail ? '/':nil}"
-
-      puts retval
-      retval
     end
   end
 end
