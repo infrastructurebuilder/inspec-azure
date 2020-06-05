@@ -24,6 +24,7 @@ class AzurermNetworkDnsRecords < AzurermPluralResource
   def initialize(resource_group: nil, zone_name:, record_type: )
     @record_type = record_type
     dns_records = management.dns_records(resource_group: resource_group, zone_name: zone_name, record_type: record_type)
+#    puts "\n\ndns_records is \n#{dns_records}"
     return if has_error?(dns_records)
 
     @table = dns_records
