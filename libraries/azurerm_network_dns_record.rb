@@ -6,8 +6,9 @@ class AzurermNetworkDnsRecord < AzurermSingularResource
   name 'azurerm_network_dns_record'
   desc 'Verifies settings for an Azure Network DNS Zone'
   example <<-EXAMPLE
-    describe azurerm_network_dns_zone(resource_group: 'rg-1', name: 'myzonename') do
+    describe resource_group: 'rg-1',  zone_name: 'myzonename', record_type: 'A' do
       it { should exist }
+      its('ipv4addresses') { should contain '22.332.23123.2323232' }
     end
   EXAMPLE
 
