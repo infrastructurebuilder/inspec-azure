@@ -149,6 +149,51 @@ module Azure
           resource_group: resource_group),
         api_version: '2018-05-01',
       )
+      puts "\n: records = \n#{records}\n-----\n"
+      arecords = Hash.new
+      for d in records do
+        arecord = OpenStruct.new
+        arecord.id = d.id
+        arecord.name = d.name
+        arecord.type = d.type
+        arecord.fqdn = d.properties.fqdn
+        arecord.TTL = d.properties.TTL
+        arecord.etag = d.etag
+        arecord.properties = d.properties
+        case record_type
+        when 'A'
+          arecord.ipv4addresses = d.properties.ARecords.collect { |r| r.ipv4Address }
+        when 'AAAA'
+          arecord.ipv6addresses = d.properties.AAAARecords.collect { |r| r.ipv6Address }
+        when 'CAA'
+          arecord.caarecords = d.properties.caaRecords
+        when 'CNAME'
+          arecord.cname = d.properties.CNAMERecord.cname
+        when 'MX'
+          arecord.exchanges = d.properties.MXRecords.sort_by { |r| r.preference }.collect { |r| r.exchange }
+        when 'NS'
+          arecord.nsdnames = d.properties.NSRecords.collect {|r| r.nsdname }
+        when 'PTR'
+          arecord.ptrdnames = d.properties.NSRecords.collect {|r| r.nsdname }
+        when 'SOA'
+          arecord.email = d.properties.SOARecord.email
+          arecord.expireTime = d.properties.SOARecord.expireTime
+          arecord.host = d.properties.SOARecord.host
+          arecord.minimumTTL = d.properties.SOARecord.minimumTTL
+          arecord.refreshTime = d.properties.SOARecord.refreshTime
+          arecord.retryTime = d.properties.SOARecord.retryTime
+          arecord.serialNumber = d.properties.SOARecord.serialNumber
+        when 'SRV'          
+          a.srvrecords = d.properties.SRVRecords
+        when 'TXT'
+          arecord.txtvalues = d.properties.TXTRecords.collect {|r| r.value}
+        else 
+          #
+        end        
+        arecords[d.name]  = arecord if (record_name == nil || record_name == d.name)
+      end
+      puts "\nIPV4 = #{arecords}\n"
+      arecords
     end
 
 
