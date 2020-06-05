@@ -7,7 +7,7 @@ class AzurermNetworkDnsRecords < AzurermPluralResource
   name 'azurerm_network_dns_records'
   desc 'Verifies settings for a collection of Azure DNS Records for a given Zone of a given type'
   example <<-EXAMPLE
-    describe azurerm_network_dns_records do
+    describe azurerm_network_dns_records( resource_group: 'rg-1', zone_name: 'myzone' ) do
         it  { should exist }
     end
   EXAMPLE
