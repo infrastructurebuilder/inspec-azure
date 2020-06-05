@@ -23,12 +23,10 @@ class AzurermNetworkDnsZone < AzurermSingularResource
   attr_reader(*ATTRS)
 
   def initialize(resource_group: nil, name: nil)
-    puts "Name is #{name}"
-    puts "RG is #{resource_group}"
     @name = name
     @resource_group = resource_group
     dns_zone = management.dns_zone(resource_group, name)
-    puts "dns_zone is #{dns_zone}"
+#    puts "dns_zone is #{dns_zone}"
     return if has_error?(dns_zone)
 
     assign_fields(ATTRS, dns_zone)

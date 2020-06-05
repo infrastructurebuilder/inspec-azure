@@ -23,7 +23,7 @@ class AzurermNetworkDnsRecordsets < AzurermPluralResource
 
   def initialize(resource_group: nil, zone_name:    )
     dns_recordsets = management.dns_recordsets(resource_group, zone_name)
-    puts "Recordsets is \n#{dns_recordsets}"
+#    puts "Recordsets is \n#{dns_recordsets}"
     return if has_error?(dns_recordsets)
 
     @table = dns_recordsets
