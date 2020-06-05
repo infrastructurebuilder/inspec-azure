@@ -99,14 +99,17 @@ module Azure
         when 'A'
           arecord.ipv4addresses = d.properties.ARecords.collect { |r| r.ipv4Address }
         when 'AAAA'
-          return records
+          arecord.ipv6addresses = d.properties.AAAARecords.collect { |r| r.ipv6Address }
         when 'CAA'
-          return records
+          arecord.caarecords = d.properties.caaRecords
         when 'CNAME'
-          
+          arecord.cname = d.properties.CNAMERecord.cname
         when 'MX'
+          arecord.exchanges = d.properties.MXRecords.sort_by { |r| r.preference }.collect { |r| r.exchange }
         when 'NS'
+          arecord.nsdnames = d.properties.NSRecords.collect {|r| r.nsdname }
         when 'PTR'
+          arecord.ptrdnames = d.properties.NSRecords.collect {|r| r.nsdname }
         when 'SOA'
           arecord.email = d.properties.SOARecord.email
           arecord.expireTime = d.properties.SOARecord.expireTime
@@ -115,9 +118,10 @@ module Azure
           arecord.refreshTime = d.properties.SOARecord.refreshTime
           arecord.retryTime = d.properties.SOARecord.retryTime
           arecord.serialNumber = d.properties.SOARecord.serialNumber
-        when 'SRV'
+        when 'SRV'          
+          a.srvrecords = d.properties.SRVRecords
         when 'TXT'
-          
+          arecord.txtvalues = d.properties.TXTRecords.collect {|r| r.value}
         else 
           #
         end        
