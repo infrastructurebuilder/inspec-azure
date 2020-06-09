@@ -51,6 +51,14 @@ module Azure
       )
     end
 
+    def api_management_service(resource_group, service_name )
+      get(
+        url: link(location: 'Microsoft.ApiManagement/service/#{service_name}',
+                  resource_group: resource_group)
+      , api_version: '2019-12-01',
+      )
+    end
+
     def blob_container(resource_group, storage_account_name, blob_container_name)
       get(
         url: link(location: "Microsoft.Storage/storageAccounts/#{storage_account_name}/"\
