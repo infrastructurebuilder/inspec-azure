@@ -4,10 +4,11 @@ require 'azurerm_resource'
 
 class AzurermApiManagementService < AzurermSingularResource
   name 'azurerm_api_management_service'
-  desc 'Verifies settings for an Azure Network DNS Zone'
+  desc 'Verifies settings for an Azure API Management Service'
   example <<-EXAMPLE
     describe azurerm_api_management_service(resource_group: 'rg-1',  name: 'myservicename' ) do
       it { should exist }
+      its('publisherEmail') { should cmp 'jeff@jeff.com' }
     end
   EXAMPLE
 
@@ -68,5 +69,6 @@ class AzurermApiManagementService < AzurermSingularResource
   def to_s
     "Azure API Management Service : #{name}"
   end
+
 
 end
