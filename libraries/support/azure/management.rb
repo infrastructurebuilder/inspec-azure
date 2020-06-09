@@ -53,9 +53,10 @@ module Azure
 
     def api_management_service(resource_group, service_name )
       get(
-        url: link(location: 'Microsoft.ApiManagement/service/#{service_name}',
-                  resource_group: resource_group)
-      , api_version: '2019-12-01',
+        url: link(location: "Microsoft.ApiManagement/service/#{service_name}",
+                  resource_group: resource_group,
+                  trail: false), 
+        api_version: '2019-12-01'
       )
     end
 
