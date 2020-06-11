@@ -63,7 +63,7 @@ class AzurermApiManagementService < AzurermSingularResource
 
   def scmUrl
     properties['scmUrl'] || nil
-end
+  end
 
 
   def to_s
