@@ -60,6 +60,24 @@ module Azure
       )
     end
 
+    def app_service_plan(resource_group: nil, plan_name: )
+      records = get(
+        url: link(trail:false,  location: "Microsoft.Web/serverfarms/#{plan_name}",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+    def app_service_plans(resource_group: nil)
+      records = get(
+        url: link(trail:false,  location: "Microsoft.Web/serverfarms",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+
+
     def blob_container(resource_group, storage_account_name, blob_container_name)
       get(
         url: link(location: "Microsoft.Storage/storageAccounts/#{storage_account_name}/"\
