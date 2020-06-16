@@ -24,11 +24,9 @@ class AzurermAppServicePlan < AzurermSingularResource
   attr_reader(*ATTRS)
 
   def initialize(resource_group: nil, plan_name: )
-    @name = name
-    @resource_group = resource_group
-    @plan_name = plan_name
-    record = management.app_service_plan(resource_group: resource_group, plan_name: plan_name )
-    return if has_error?(record)
+    app_service_plan = management.app_service_plan(resource_group: resource_group, plan_name: plan_name )
+    return if has_error?(app_service_plan)
+    assign_fields(ATTRS, app_service_plan)
     @exists = true
   end
 
@@ -61,6 +59,6 @@ class AzurermAppServicePlan < AzurermSingularResource
   end
 
   def to_s
-    "Azure App Service Plan: #{name}"
+    "App Service Plan: '#{name}'"
   end
 end
