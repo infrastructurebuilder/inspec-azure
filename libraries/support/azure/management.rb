@@ -68,6 +68,44 @@ module Azure
       )
     end
 
+
+    def app_service_plan_vnet(resource_group: nil, plan_name: nil, vnet_name: nil )
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections/#{vnet_name}",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+    def app_service_plan_vnets(resource_group: nil, plan_name: nil)
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+
+    def app_service_plan_vnet_route(resource_group: nil, plan_name: nil, vnet_name: nil, route_name: nil )
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections/#{vnet_name}/routes/#{route_name}",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+    def app_service_plan_vnet_routes(resource_group: nil, plan_name: nil, vnet_name: nil )
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections/#{vnet_name}/routes",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
     def app_service_plans(resource_group: nil)
       records = get(
         url: link(trail:false,  location: "Microsoft.Web/serverfarms",

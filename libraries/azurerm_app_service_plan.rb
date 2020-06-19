@@ -27,7 +27,14 @@ class AzurermAppServicePlan < AzurermSingularResource
     app_service_plan = management.app_service_plan(resource_group: resource_group, plan_name: plan_name )
     return if has_error?(app_service_plan)
     assign_fields(ATTRS, app_service_plan)
+    @resource_group = resource_group
+    @plan_name = plan_name
     @exists = true
+  end
+
+  def vnets
+    # FIXME? Calls API twice but overloading makes a mess of the classes
+    @vnets ||= management.app_service_plan_vnets(@resource_group, @plan_name).collect { |vnet| AzurermAppServicePlanVnet.new(@resource_group, @plan_name, vnet) }
   end
 
   def status
@@ -59,6 +66,7 @@ class AzurermAppServicePlan < AzurermSingularResource
   end
 
   def to_s
-    "App Service Plan: '#{name}'"
+    "Azure App Service Plan: '#{name}'"
   end
+
 end
