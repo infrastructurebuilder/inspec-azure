@@ -28,9 +28,9 @@ To create your account Service Principal Account:
 
 1. Login to the Azure portal.
 2. Click on `Azure Active Directory`.
-3. Click on `APP registrations`.
-4. Click on `New application registration`.
-5. Fill in a name and select `Web` from the `Application Type` drop down. Save your application.
+3. Click on `App registrations`.
+4. Click on `Register an Application`.
+5. Fill in a name and select `Web` from the `Application Type` drop down. Save your application by clicking `Register`.
 6. Note your Application ID. This is your `client_id` above.
 7. Click on `Certificates & secrets`
 8. Click on `New client secret`
