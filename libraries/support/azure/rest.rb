@@ -30,6 +30,7 @@ module Azure
 
     def post(path, params: {}, headers: {}, body: nil)
       add_user_agent!(headers)
+      puts path
       connection.post do |req|
         req.url path
         req.body    = body if body

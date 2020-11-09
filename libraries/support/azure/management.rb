@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'singleton'
+require 'ostruct'
 
 module Azure
   class Management
@@ -50,6 +51,71 @@ module Azure
       )
     end
 
+    def api_management_service(resource_group, service_name )
+      get(
+        url: link(location: "Microsoft.ApiManagement/service/#{service_name}",
+                  resource_group: resource_group,
+                  trail: false), 
+        api_version: '2019-12-01'
+      )
+    end
+
+    def app_service_plan(resource_group: nil, plan_name: )
+      records = get(
+        url: link(trail:false,  location: "Microsoft.Web/serverfarms/#{plan_name}",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+
+    def app_service_plan_vnet(resource_group: nil, plan_name: nil, vnet_name: nil )
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections/#{vnet_name}",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+    def app_service_plan_vnets(resource_group: nil, plan_name: nil)
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+
+    def app_service_plan_vnet_route(resource_group: nil, plan_name: nil, vnet_name: nil, route_name: nil )
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections/#{vnet_name}/routes/#{route_name}",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+    def app_service_plan_vnet_routes(resource_group: nil, plan_name: nil, vnet_name: nil )
+      records = get(
+        url: link(trail:false,  
+          location: "Microsoft.Web/serverfarms/#{plan_name}/virtualNetworkConnections/#{vnet_name}/routes",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+    def app_service_plans(resource_group: nil)
+      records = get(
+        url: link(trail:false,  location: "Microsoft.Web/serverfarms",
+          resource_group: resource_group),
+        api_version: '2019-08-01',
+      )
+    end
+
+
+
     def blob_container(resource_group, storage_account_name, blob_container_name)
       get(
         url: link(location: "Microsoft.Storage/storageAccounts/#{storage_account_name}/"\
@@ -65,6 +131,41 @@ module Azure
                           'blobServices/default/containers/',
                   resource_group: resource_group),
         api_version: '2018-07-01',
+      )
+    end
+
+    def dns_recordsets(resource_group, zone_name)
+      get(
+        url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{zone_name}/all",
+          resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+    end
+
+
+    def dns_records(resource_group: nil, zone_name: , record_type: )
+      records = get(
+        url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{zone_name}/#{record_type}",
+          resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+    end
+
+
+
+    def dns_zone(resource_group, name)
+      get(
+        url: link(trail:false,  location: "Microsoft.Network/dnsZones/#{name}",
+                  resource_group: resource_group),
+        api_version: '2018-05-01',
+      )
+    end
+
+    def dns_zones(resource_group)
+      get(
+        url: link(location: 'Microsoft.Network/dnszones',
+                  resource_group: resource_group),
+        api_version: '2018-05-01',
       )
     end
 
@@ -155,6 +256,30 @@ module Azure
         url: link(location: 'Microsoft.DBforMySQL/servers/',
                   resource_group: resource_group),
         api_version: '2017-12-01',
+      )
+    end
+
+    def mariadb_server(resource_group, name)
+      get(
+        url: link(location: "Microsoft.DBforMariaDB/servers/#{name}",
+                  resource_group: resource_group),
+        api_version: '2018-06-01-preview',
+      )
+    end
+
+    def mariadb_server_firewall_rules(resource_group, server_name)
+      get(
+        url: link(location: "Microsoft.DBforMariaDB/servers/#{server_name}/firewallRules",
+                  resource_group: resource_group),
+        api_version: '2018-06-01-preview',
+      )
+    end
+
+    def mariadb_servers(resource_group)
+      get(
+        url: link(location: 'Microsoft.DBforMariaDB/servers/',
+                  resource_group: resource_group),
+        api_version: '2018-06-01-preview',
       )
     end
 
@@ -647,11 +772,11 @@ module Azure
       @rest_client ||= Azure::Rest.new(backend.azure_client)
     end
 
-    def link(location:, provider: true, resource_group: nil)
+    def link(location:, provider: true, resource_group: nil, trail:true)
       "/subscriptions/#{subscription_id}" \
       "#{"/resourceGroups/#{resource_group}" if resource_group}" \
       "#{'/providers' if provider}" \
-      "/#{location}/"
+      "/#{location}#{trail ? '/':nil}"
     end
   end
 end
